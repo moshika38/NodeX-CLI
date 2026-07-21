@@ -1,0 +1,25 @@
+{
+  "name": "stackkit",
+  "version": "1.0.0",
+  "description": "CLI tool to generate backend projects",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "stackkit": "./bin/stackkit.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^11.3.6",
+    "inquirer": "^14.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  }
+}
