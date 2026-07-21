@@ -1,11 +1,11 @@
 {
-  "name": "stackkit",
+   "name": "create-stackkit",
   "version": "1.0.0",
   "description": "CLI tool to generate backend projects",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "stackkit": "./bin/stackkit.js"
+    "stackkit": "./bin/create-stackkit.js"
   },
   "scripts": {
     "dev": "tsx src/index.ts"
