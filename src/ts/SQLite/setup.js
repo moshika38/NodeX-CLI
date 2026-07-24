@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 import { execSync } from "child_process";
 import { createProjectFiles } from "./src/updateStructure.js";
@@ -10,9 +10,7 @@ export function setupSqliteProject(projectName) {
 
   try {
     //! 1. Create folder
-    if (!fs.existsSync(projectPath)) {
-      fs.mkdirSync(projectPath, { recursive: true });
-    }
+    fs.ensureDirSync(projectPath);
 
     console.log("⚙️ Starting setup process...\n");
 

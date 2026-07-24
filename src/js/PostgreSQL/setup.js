@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 import { execSync } from "child_process";
 
@@ -13,9 +13,7 @@ export function setupPostgreSqlJsProject(projectName, databaseUrl) {
 
   try {
     //! 1. Create folder
-    if (!fs.existsSync(projectPath)) {
-      fs.mkdirSync(projectPath, { recursive: true });
-    }
+    fs.ensureDirSync(projectPath);
 
     console.log("⚙️ Starting setup process...\n");
 
@@ -70,7 +68,7 @@ export function setupPostgreSqlJsProject(projectName, databaseUrl) {
     //   stdio: "ignore",
     // });
     if (databaseUrl && databaseUrl.trim() !== "") {
-      execSync("npx prisma db push    ", { cwd: projectPath, stdio: "ignore" });
+      execSync("npx prisma db push", { cwd: projectPath, stdio: "ignore" });
     } else {
       console.log(
         "⚠️ Warning: Cannot push database to remote server! Update database url in .env and run `npx prisma db push`",

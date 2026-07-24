@@ -1,21 +1,11 @@
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
-
-function writeFileWithDirectory(filePath, content) {
-  const dirPath = path.dirname(filePath);
-
-   if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
-  }
-
-   fs.writeFileSync(filePath, content.trim(), "utf-8");
-}
 
 export function createProjectFiles(projectPath) {
   // 1. .env
   const envPath = path.join(projectPath, ".env");
   const envContent = `DATABASE_URL="file:./dev.db"\n`;
-  writeFileWithDirectory(envPath, envContent);
+  fs.outputFileSync(envPath, envContent);
 
   // 2. src/config/prisma.ts  
   const prismaConfigPath = path.join(projectPath, "src/config/prisma.ts");
@@ -34,7 +24,7 @@ const prisma = new PrismaClient({
 
 export default prisma;
 `;
-  writeFileWithDirectory(prismaConfigPath, prismaConfigContent);
+  fs.outputFileSync(prismaConfigPath, prismaConfigContent.trim());
 
   // 3. src/index.ts
   const indexPath = path.join(projectPath, "src/index.ts");
@@ -50,12 +40,11 @@ app.use("/api/users", userRoutes);
 const PORT = 5000;
 
 app.listen(PORT, () => {
-  console.log(\`Server running on http://localhost:\${PORT}\ \`);
-  console.log(\`Endpoint available at http://localhost:\${PORT}\/api/users\`);
+  console.log(\`Server running on http://localhost:\${PORT}\`);
+  console.log(\`Endpoint available at http://localhost:\${PORT}/api/users\`);
 });
-
 `;
-  writeFileWithDirectory(indexPath, indexContent);
+  fs.outputFileSync(indexPath, indexContent.trim());
 
   // 4. src/routes/user.routes.ts
   const routesPath = path.join(projectPath, "src/routes/user.routes.ts");
@@ -70,7 +59,7 @@ router.post("/", createUser);
 
 export default router;
 `;
-  writeFileWithDirectory(routesPath, routesContent);
+  fs.outputFileSync(routesPath, routesContent.trim());
 
   // 5. src/controllers/user.controller.ts
   const controllerPath = path.join(
@@ -126,5 +115,5 @@ export const createUser = async (
   }
 };
 `;
-  writeFileWithDirectory(controllerPath, controllerContent);
+  fs.outputFileSync(controllerPath, controllerContent.trim());
 }

@@ -1,13 +1,11 @@
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 
 export function updatePrismaSchema(projectPath) {
   const prismaDirPath = path.join(projectPath, "prisma");
   const schemaPath = path.join(prismaDirPath, "schema.prisma");
 
-  if (!fs.existsSync(prismaDirPath)) {
-    fs.mkdirSync(prismaDirPath, { recursive: true });
-  }
+  fs.ensureDirSync(prismaDirPath);
 
   const schemaContent = `
   generator client {

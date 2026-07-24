@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 import { execSync } from "child_process";
 import { updatePackageJson } from "./src/packageJsonUpdate.js";
@@ -11,9 +11,7 @@ export function setupMongoDbJsProject(projectName, databaseUrl) {
   const projectPath = path.join(process.cwd(), projectName);
 
   try {
-    if (!fs.existsSync(projectPath)) {
-      fs.mkdirSync(projectPath, { recursive: true });
-    }
+    fs.ensureDirSync(projectPath);
 
     console.log("⚙️ Starting setup process...\n");
 
@@ -63,7 +61,7 @@ export function setupMongoDbJsProject(projectName, databaseUrl) {
     });
 
     if (databaseUrl && databaseUrl.trim() !== "") {
-      execSync("npx prisma db push    ", { cwd: projectPath, stdio: "ignore" });
+      execSync("npx prisma db push", { cwd: projectPath, stdio: "ignore" });
     } else {
       console.log(
         "⚠️ Warning: Cannot push database to remote server! Update database url in .env and run `npx prisma db push`",

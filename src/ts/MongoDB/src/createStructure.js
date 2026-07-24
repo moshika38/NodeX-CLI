@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 
 /**
@@ -97,10 +97,7 @@ app.listen(PORT, () => {
     const fullPath = path.join(projectPath, filePath);
     const dirName = path.dirname(fullPath);
 
-     if (!fs.existsSync(dirName)) {
-      fs.mkdirSync(dirName, { recursive: true });
-    }
-
+     fs.ensureDirSync(dirName);
      fs.writeFileSync(fullPath, content, "utf-8");
   });
 

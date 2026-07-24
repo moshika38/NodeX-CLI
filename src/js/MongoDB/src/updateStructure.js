@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 
 /**
@@ -110,11 +110,7 @@ app.listen(PORT, () => {
     const fullPath = path.join(projectPath, filePath);
     const dirName = path.dirname(fullPath);
 
-     // FIXED: Changed fs.exisjsSync to fs.existsSync
-     if (!fs.existsSync(dirName)) {
-      fs.mkdirSync(dirName, { recursive: true });
-    }
-
+     fs.ensureDirSync(dirName);
      fs.writeFileSync(fullPath, content, "utf-8");
   });
 }
@@ -123,10 +119,7 @@ export function updatePrismaSchema(projectPath) {
   const prismaDirPath = path.join(projectPath, "prisma");
   const schemaPath = path.join(prismaDirPath, "schema.prisma");
 
-  // FIXED: Changed fs.exisjsSync to fs.existsSync
-  if (!fs.existsSync(prismaDirPath)) {
-    fs.mkdirSync(prismaDirPath, { recursive: true });
-  }
+  fs.ensureDirSync(prismaDirPath);
 
   const schemaContent = `
   
