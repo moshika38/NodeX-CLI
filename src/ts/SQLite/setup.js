@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
-import { createProjectFiles } from "./src/projectConfig.js";
+import { createProjectFiles } from "./src/updateStructure.js";
 import { updatePackageJsonScripts } from "./src/jsonFileUpdate.js";
 import { updatePrismaSchema } from "./src/prismaSchema.js";
 

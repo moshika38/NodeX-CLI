@@ -6,22 +6,12 @@ import path from "path";
  * 
  * @param {string} projectPath - Target project root directory path
  */
-export function createProjectFiles(projectPath) {
+export function createStructure(projectPath) {
    const filesToCreate = [
     {
       filePath: "src/config/prisma.ts",
-      content: `import "dotenv/config";
-import { PrismaClient } from "../generated/prisma/client.js";
-import { PrismaPg } from "@prisma/adapter-pg";
-
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL!,
-});
-
-export const prisma = new PrismaClient({
-  adapter,
-});
-
+      content: `import { PrismaClient } from "@prisma/client";
+export const prisma = new PrismaClient();
 export default prisma;
 `,
     },
@@ -44,14 +34,12 @@ export default router;
 import prisma from "../config/prisma.js";
 
 // GET all users
-export const getUsers = async (
-  req: Request,
-  res: Response
-) => {
+export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany();
     res.status(200).json(users);
   } catch (error) {
+    console.error("GET USERS ERROR:", error);
     res.status(500).json({
       message: "Internal Server Error",
     });
@@ -59,10 +47,7 @@ export const getUsers = async (
 };
 
 // CREATE user
-export const createUser = async (
-  req: Request,
-  res: Response
-) => {
+export const createUser = async (req: Request, res: Response) => {
   try {
     const { name, email } = req.body;
 
@@ -89,10 +74,12 @@ export const createUser = async (
     {
       filePath: "src/index.ts",
       content: `import express from "express";
+import cors from "cors";
 import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/users", userRoutes);
@@ -102,8 +89,7 @@ const PORT = 5000;
 app.listen(PORT, () => {
   console.log(\`Server running on http://localhost:\${PORT}\`);
   console.log(\`Endpoint available at http://localhost:\${PORT}\/api/users\`);
-});
-`,
+});`,
     },
   ];
 
@@ -118,5 +104,4 @@ app.listen(PORT, () => {
      fs.writeFileSync(fullPath, content, "utf-8");
   });
 
-//   console.log("✅ All initial files created successfully!");
-}
+ }

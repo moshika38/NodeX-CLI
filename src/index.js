@@ -1,6 +1,8 @@
 import inquirer from "inquirer";
-import { setupProject as setupSqlProject } from "./ts/SQLite/SQLiteSetupProject.js";
-import { setupPostgreSqlProject } from "./ts/PostgreSQL/postgreSqlSetupProject.js";
+import { setupProject as setupSqlProject } from "./ts/SQLite/setup.js";
+import { setupPostgreSqlProject } from "./ts/PostgreSQL/setup.js";
+import { setupMongoDBProject} from "./ts/MongoDB/setup.js";
+
 
 console.log(`
 ███████╗████████╗ █████╗  ██████╗██╗  ██╗██╗  ██╗██╗████████╗
@@ -57,7 +59,7 @@ if (answers.database === "MongoDB") {
       type: "input",
       name: "mongoUrl",
       message: "Enter MongoDB connection URL:",
-      default: "mongodb://localhost:27017/mydb",
+      default: "",
     },
   ]);
 }
@@ -68,8 +70,8 @@ const config = {
   ...dbConfig,
 };
 
-console.log("\n🚀 StackKit Configuration:");
-console.log(config);
+// console.log("\n🚀 StackKit Configuration:");
+console.log("\n");
 
 // Run setup conditionally based on chosen database
 switch (config.database) {
@@ -80,10 +82,9 @@ switch (config.database) {
   case "PostgreSQL":
     await setupPostgreSqlProject(projectName, config.dbUrl);
     break;
-
-  case "MongoDB":
-    // TODO: Connect your Mongo setup function here
-    console.log("Setting up MongoDB project...");
+    
+    case "MongoDB":
+    await setupMongoDBProject(projectName, config.mongoUrl);
     break;
 
   default:
