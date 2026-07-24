@@ -1,16 +1,25 @@
 {
-   "name": "create-stackkit",
+  "name": "nodex-cli",
   "version": "1.0.0",
-  "description": "CLI tool to generate backend projects",
+  "description": "CLI tool to generate Express backend projects",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "stackkit": "./bin/create-stackkit.js"
+    "nodex-cli": "./bin/create-nodex.js",
+    "nodex": "./bin/create-nodex.js"
   },
   "scripts": {
     "dev": "tsx src/index.ts"
   },
-  "keywords": [],
+  "keywords": [
+    "express",
+    "backend",
+    "cli",
+    "generator",
+    "nodex",
+    "typescript",
+    "prisma"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
