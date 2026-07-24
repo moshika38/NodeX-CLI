@@ -4,13 +4,11 @@ import path from "path";
 function writeFileWithDirectory(filePath, content) {
   const dirPath = path.dirname(filePath);
 
-  // Folder එක නැත්නම් හදනවා
-  if (!fs.existsSync(dirPath)) {
+   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
   }
 
-  // File එක සූදානම් කර කෙලින්ම write කරනවා (Overwrite වෙන විදිහට)
-  fs.writeFileSync(filePath, content.trim(), "utf-8");
+   fs.writeFileSync(filePath, content.trim(), "utf-8");
 }
 
 export function createProjectFiles(projectPath) {
@@ -19,7 +17,7 @@ export function createProjectFiles(projectPath) {
   const envContent = `DATABASE_URL="file:./dev.db"\n`;
   writeFileWithDirectory(envPath, envContent);
 
-  // 2. src/config/prisma.ts (lib නෙවෙයි src)
+  // 2. src/config/prisma.ts  
   const prismaConfigPath = path.join(projectPath, "src/config/prisma.ts");
   const prismaConfigContent = `import "dotenv/config";
 

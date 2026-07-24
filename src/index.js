@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
-import { setupProject } from "./ts/SQLite/SQLiteSetupProject.js";
+import { setupProject as setupSqlProject } from "./ts/SQLite/SQLiteSetupProject.js";
+import { setupPostgreSqlProject } from "./ts/PostgreSQL/postgreSqlSetupProject.js";
 
 console.log(`
 ███████╗████████╗ █████╗  ██████╗██╗  ██╗██╗  ██╗██╗████████╗
@@ -11,7 +12,6 @@ console.log(`
 
 🚀 StackKit CLI
 🛠️  Build your node.js backend with one command
-
 `);
 
 const args = process.argv.slice(2);
@@ -25,13 +25,13 @@ if (!projectName) {
 
 const answers = await inquirer.prompt([
   {
-    type: "select",
+    type: "select",  
     name: "language",
     message: "Select language:",
     choices: ["TypeScript", "JavaScript"],
   },
   {
-    type: "select",
+    type: "select",  
     name: "database",
     message: "Select database:",
     choices: ["SQLite", "PostgreSQL", "MongoDB"],
@@ -44,32 +44,9 @@ if (answers.database === "PostgreSQL") {
   dbConfig = await inquirer.prompt([
     {
       type: "input",
-      name: "databaseName",
-      message: "Enter PostgreSQL database name:",
-      default: "my_database",
-    },
-    {
-      type: "input",
-      name: "username",
-      message: "Enter PostgreSQL username:",
-      default: "postgres",
-    },
-    {
-      type: "password",
-      name: "password",
-      message: "Enter PostgreSQL password:",
-    },
-    {
-      type: "input",
-      name: "host",
-      message: "Enter PostgreSQL host:",
-      default: "localhost",
-    },
-    {
-      type: "input",
-      name: "port",
-      message: "Enter PostgreSQL port:",
-      default: "5432",
+      name: "dbUrl",  
+      message: "Enter PostgreSQL Connection String/URL:",
+      default: "",
     },
   ]);
 }
@@ -94,5 +71,21 @@ const config = {
 console.log("\n🚀 StackKit Configuration:");
 console.log(config);
 
-// Run setupProject function
-setupProject(projectName);
+// Run setup conditionally based on chosen database
+switch (config.database) {
+  case "SQLite":
+    await setupSqlProject(projectName);
+    break;
+
+  case "PostgreSQL":
+    await setupPostgreSqlProject(projectName, config.dbUrl);
+    break;
+
+  case "MongoDB":
+    // TODO: Connect your Mongo setup function here
+    console.log("Setting up MongoDB project...");
+    break;
+
+  default:
+    console.log("❌ Unsupported database selected");
+}

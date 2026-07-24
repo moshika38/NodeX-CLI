@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
-import { createProjectFiles } from "./projectConfig.js";
-import { updatePackageJsonScripts } from "./jsonFileUpdate.js";
-import { updatePrismaSchema } from "./prismaSchema.js";
+import { createProjectFiles } from "./src/projectConfig.js";
+import { updatePackageJsonScripts } from "./src/jsonFileUpdate.js";
+import { updatePrismaSchema } from "./src/prismaSchema.js";
 
 export function setupProject(projectName) {
   const projectPath = path.join(process.cwd(), projectName);
