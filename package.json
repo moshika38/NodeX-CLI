@@ -1,12 +1,12 @@
 {
-   "name": "create-nodex",
+   "name": "create-nodex-cli",
    "version": "1.0.1",
    "description": "CLI tool to generate backend projects",
    "main": "index.js",
    "type": "module",
    "bin": {
-      "nodex": "./bin/create-nodex.js",
-      "nodex-cli": "./bin/create-nodex.js"
+      "nodex": "bin/create-nodex.js",
+      "nodex-cli": "bin/create-nodex.js"
    },
    "scripts": {
       "dev": "tsx src/index.ts"
