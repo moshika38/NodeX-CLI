@@ -5,7 +5,7 @@ import { createProjectFiles } from "./src/updateStructure.js";
 import { updatePackageJsonScripts } from "./src/jsonFileUpdate.js";
 import { updatePrismaSchema } from "./src/prismaSchema.js";
 
-export function setupProject(projectName) {
+export function setupSqliteProject(projectName) {
   const projectPath = path.join(process.cwd(), projectName);
 
   try {

@@ -1,7 +1,13 @@
 import inquirer from "inquirer";
-import { setupProject as setupSqlProject } from "./ts/SQLite/setup.js";
+// ts
+import { setupSqliteProject as setupSqlProject } from "./ts/SQLite/setup.js";
 import { setupPostgreSqlProject } from "./ts/PostgreSQL/setup.js";
-import { setupMongoDBProject} from "./ts/MongoDB/setup.js";
+import { setupMongoDBProject } from "./ts/MongoDB/setup.js";
+// js
+import { setupSqliteJsProject } from "./js/SQLite/setup.js";
+import { setupPostgreSqlJsProject } from "./js/PostgreSQL/setup.js";
+import { setupMongoDbJsProject } from "./js/MongoDB/setup.js";
+
 
 
 console.log(`
@@ -27,13 +33,13 @@ if (!projectName) {
 
 const answers = await inquirer.prompt([
   {
-    type: "select",  
+    type: "select",
     name: "language",
     message: "Select language:",
     choices: ["TypeScript", "JavaScript"],
   },
   {
-    type: "select",  
+    type: "select",
     name: "database",
     message: "Select database:",
     choices: ["SQLite", "PostgreSQL", "MongoDB"],
@@ -46,7 +52,7 @@ if (answers.database === "PostgreSQL") {
   dbConfig = await inquirer.prompt([
     {
       type: "input",
-      name: "dbUrl",  
+      name: "dbUrl",
       message: "Enter PostgreSQL Connection String/URL:",
       default: "",
     },
@@ -73,20 +79,38 @@ const config = {
 // console.log("\n🚀 StackKit Configuration:");
 console.log("\n");
 
-// Run setup conditionally based on chosen database
-switch (config.database) {
-  case "SQLite":
-    await setupSqlProject(projectName);
-    break;
+if (answers.language === "TypeScript") {
+  switch (config.database) {
+    case "SQLite":
+      await setupSqlProject(projectName);
+      break;
 
-  case "PostgreSQL":
-    await setupPostgreSqlProject(projectName, config.dbUrl);
-    break;
-    
+    case "PostgreSQL":
+      await setupPostgreSqlProject(projectName, config.dbUrl);
+      break;
+
     case "MongoDB":
-    await setupMongoDBProject(projectName, config.mongoUrl);
-    break;
+      await setupMongoDBProject(projectName, config.mongoUrl);
+      break;
 
-  default:
-    console.log("❌ Unsupported database selected");
+    default:
+      console.log("❌ Unsupported database selected");
+  }
+} else {
+  switch (config.database) {
+    case "SQLite":
+      setupSqliteJsProject(projectName);
+      break;
+
+    case "PostgreSQL":
+      setupPostgreSqlJsProject(projectName, config.dbUrl);
+      break;
+      
+      case "MongoDB":
+      setupMongoDbJsProject(projectName, config.mongoUrl);
+      break;
+
+    default:
+      console.log("❌ Unsupported database selected");
+  }
 }
