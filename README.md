@@ -28,7 +28,7 @@ A modern, fast, and interactive command-line interface (CLI) tool designed to bo
 You can run NodeX CLI directly using `npx` without installing it globally:
 
 ```bash
-npx nodex-cli my-app
+npx create-nodex-cli my-app
 ```
 
 Or run it using `npm create`:
