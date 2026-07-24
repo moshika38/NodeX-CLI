@@ -103,6 +103,12 @@ When you run `nodex-cli <project-name>`, you will be prompted to select:
 
 ---
 
+## 🔥 Preview
+
+<img width="1026" height="597" alt="Screenshot from 2026-07-25 00-19-53" src="https://github.com/user-attachments/assets/fa1004d2-a39d-4cd0-84f1-b86b7947afe1" />
+
+---
+
 ## 📜 License
 
 This project is licensed under the **ISC License**.

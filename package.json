@@ -6,13 +6,39 @@
    "type": "module",
    "bin": {
       "nodex": "bin/create-nodex.js",
-      "nodex-cli": "bin/create-nodex.js"
+      "nodex-cli": "bin/create-nodex.js",
+      "create-nodex-cli": "bin/create-nodex.js"
    },
    "scripts": {
       "dev": "tsx src/index.ts"
    },
-   "keywords": [],
-   "author": "",
+   "keywords": [
+      "nodex",
+      "create-nodex",
+      "create-nodex-cli",
+      "cli",
+      "backend",
+      "generator",
+      "scaffolding",
+      "starter-kit",
+      "express",
+      "nodejs",
+      "typescript",
+      "javascript",
+      "mongodb",
+      "postgresql",
+      "sqlite",
+      "prisma"
+   ],
+   "author": "Moshika",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/moshika38/NodeX-CLI"
+   },
+   "bugs": {
+      "url": "https://github.com/moshika38/NodeX-CLI/issues"
+   },
+   "homepage": "https://github.com/moshika38/NodeX-CLI/blob/main/README.md",
    "license": "ISC",
    "dependencies": {
       "fs-extra": "^11.3.6",
