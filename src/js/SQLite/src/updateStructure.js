@@ -12,15 +12,10 @@ export function createProjectFiles(projectPath) {
       filePath: "src/config/prisma.js",
       content: `
 import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 
-const adapter = new PrismaBetterSqlite3({ 
-  url: process.env.DATABASE_URL || 'file:./dev.db' 
-});
+const prisma = new PrismaClient();
 
-const prisma = new PrismaClient({ adapter });
-
-export default prisma;  
+export default prisma;
 `,
     },
     {
@@ -130,6 +125,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model User {

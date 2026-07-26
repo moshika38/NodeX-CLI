@@ -25,7 +25,7 @@ export function setupSqliteJsProject(projectName) {
 
     //! 3. install packages
      
-    execSync("npm install express cors dotenv @prisma/client prisma", {
+    execSync("npm install express cors dotenv @prisma/client@6 prisma@6", {
       cwd: projectPath,
       stdio: "ignore",
     });
@@ -48,10 +48,6 @@ export function setupSqliteJsProject(projectName) {
     console.log("✅ Database url updated Successfully!");
 
     //! 9. Creating project folders
-    execSync("npm install @prisma/adapter-better-sqlite3 better-sqlite3", {
-      cwd: projectPath,
-      stdio: "ignore",
-    });
     updatePrismaSchema(projectPath);
     createProjectFiles(projectPath);
     console.log("✅ Update  Structure Successfully!");

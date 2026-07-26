@@ -37,7 +37,7 @@ export function setupSqliteProject(projectName) {
     console.log("✅ typescript installed successfully!");
 
     //! 6. init tsc
-   
+
     execSync("npx tsc --init", { cwd: projectPath, stdio: "ignore" });
     console.log("✅ init tsc successfully!");
 
@@ -58,14 +58,16 @@ export function setupSqliteProject(projectName) {
     console.log("✅ Config files updated successfully!");
 
     //! 11. Database & Prisma Client Setup
-    execSync("npm install prisma@latest @prisma/client@latest --save-dev", {
+    execSync("npm install prisma@6 @prisma/client@6", {
       cwd: projectPath,
       stdio: "ignore",
     });
-    execSync(
-      "npm install @prisma/adapter-better-sqlite3 better-sqlite3 && npm install -D @types/better-sqlite3 && npx prisma generate && npx prisma migrate dev --name init",
-      { cwd: projectPath, stdio: "ignore" },
-    );
+    execSync("npx prisma generate", { cwd: projectPath, stdio: "ignore" });
+    execSync("npx prisma migrate dev --name init", {
+      cwd: projectPath,
+      stdio: "ignore",
+    });
+    execSync("npx prisma db push", { cwd: projectPath, stdio: "ignore" });
     console.log("✅ Database and Prisma setup completed successfully!");
 
     console.log(`\n🎉 Project '${projectName}' setup finished successfully!`);

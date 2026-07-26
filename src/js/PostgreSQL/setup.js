@@ -24,7 +24,7 @@ export function setupPostgreSqlJsProject(projectName, databaseUrl) {
     //! 3. install packages
 
     execSync(
-      "npm install express cors dotenv @prisma/client @prisma/adapter-pg pg prisma",
+      "npm install express cors dotenv @prisma/client@6 prisma@6",
       {
         cwd: projectPath,
         stdio: "ignore",
@@ -55,10 +55,6 @@ export function setupPostgreSqlJsProject(projectName, databaseUrl) {
 
     updatePrismaSchema(projectPath);
     createProjectFiles(projectPath);
-    execSync("npm install @prisma/adapter-pg pg", {
-      cwd: projectPath,
-      stdio: "ignore",
-    });
     console.log("✅ Update  Structure Successfully!");
 
     //! 10. generate prisma client
