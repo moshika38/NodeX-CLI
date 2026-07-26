@@ -8,12 +8,12 @@ export function updatePrismaSchema(projectPath) {
   fs.ensureDirSync(prismaDirPath);
 
   const schemaContent = `generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model User {

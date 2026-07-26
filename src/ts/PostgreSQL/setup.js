@@ -28,7 +28,7 @@ export function setupPostgreSqlProject(projectName, databaseUrl) {
     console.log("✅ Express installed successful!");
 
     //! 4. install prisma
-    execSync("npm install @prisma/client", {
+    execSync("npm install @prisma/client@6", {
       cwd: projectPath,
       stdio: "ignore",
     });
@@ -36,7 +36,7 @@ export function setupPostgreSqlProject(projectName, databaseUrl) {
 
     //! 5. install typescript
     execSync(
-      "npm install -D typescript tsx @types/node @types/express @types/cors prisma",
+      "npm install -D typescript tsx @types/node @types/express @types/cors prisma@6",
       { cwd: projectPath, stdio: "ignore" },
     );
     execSync("npx tsc --init", { cwd: projectPath, stdio: "ignore" });
@@ -66,11 +66,7 @@ export function setupPostgreSqlProject(projectName, databaseUrl) {
     createProjectFiles(projectPath);
     console.log("✅ Update  Structure Successfully!");
 
-    //! 10. generate adapter
-    execSync("npm install @prisma/adapter-pg pg", {
-      cwd: projectPath,
-      stdio: "ignore",
-    });
+    //! 10. generate prisma client
     execSync("npx prisma generate", { cwd: projectPath, stdio: "ignore" });
     if (databaseUrl && databaseUrl.trim() !== "") {
       execSync("npx prisma db push", { cwd: projectPath, stdio: "ignore" });
