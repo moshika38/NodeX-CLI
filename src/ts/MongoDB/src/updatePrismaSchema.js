@@ -2,13 +2,13 @@ import fs from "fs-extra";
 import path from "path";
 
 export function updatePrismaSchema(projectPath) {
-  const prismaDirPath = path.join(projectPath, "prisma");
-  const schemaPath = path.join(prismaDirPath, "schema.prisma");
+  const prismaDirPath = path.resolve(projectPath, "prisma");
+  const schemaPath = path.resolve(prismaDirPath, "schema.prisma");
 
-  fs.ensureDirSync(prismaDirPath);
+  fs.mkdirSync(prismaDirPath, { recursive: true });
 
   const schemaContent = `
-  generator client {
+generator client {
   provider = "prisma-client-js"
 }
 

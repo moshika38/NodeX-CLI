@@ -1,21 +1,29 @@
 import fs from "fs-extra";
 import path from "path";
 
-
-export function updatePackageJsonScripts(projectPath) {
-  const packageJsonPath = path.join(projectPath, "package.json");
+export function updatePackageJsonScripts(projectPath, projectName) {
+  const packageJsonPath = path.resolve(projectPath, "package.json");
 
   if (fs.existsSync(packageJsonPath)) {
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+    try {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 
-    packageJson.scripts = {
-      ...packageJson.scripts,
-      dev: "tsx watch src/index.ts",
-      build: "tsc",
-      start: "node dist/index.js",
-      "db:migrate": "prisma migrate dev",
-    };
+      if (projectName) {
+        packageJson.name = projectName;
+      }
+      packageJson.type = "module";
 
-    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+      packageJson.scripts = {
+        ...packageJson.scripts,
+        dev: "tsx watch src/index.ts",
+        build: "tsc",
+        start: "node dist/index.js",
+        "db:migrate": "prisma migrate dev",
+      };
+
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2), "utf-8");
+    } catch (error) {
+      console.error("❌ Error updating package.json:", error.message);
+    }
   }
 }

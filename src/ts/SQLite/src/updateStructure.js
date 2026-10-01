@@ -3,12 +3,12 @@ import path from "path";
 
 export function createProjectFiles(projectPath) {
   // 1. .env
-  const envPath = path.join(projectPath, ".env");
+  const envPath = path.resolve(projectPath, ".env");
   const envContent = `DATABASE_URL="file:./dev.db"\n`;
   fs.outputFileSync(envPath, envContent);
 
   // 2. src/config/prisma.ts  
-  const prismaConfigPath = path.join(projectPath, "src/config/prisma.ts");
+  const prismaConfigPath = path.resolve(projectPath, "src/config/prisma.ts");
   const prismaConfigContent = `import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 
@@ -19,7 +19,7 @@ export default prisma;
   fs.outputFileSync(prismaConfigPath, prismaConfigContent.trim());
 
   // 3. src/index.ts
-  const indexPath = path.join(projectPath, "src/index.ts");
+  const indexPath = path.resolve(projectPath, "src/index.ts");
   const indexContent = `import express from "express";
 import userRoutes from "./routes/user.routes.js";
 
@@ -39,7 +39,7 @@ app.listen(PORT, () => {
   fs.outputFileSync(indexPath, indexContent.trim());
 
   // 4. src/routes/user.routes.ts
-  const routesPath = path.join(projectPath, "src/routes/user.routes.ts");
+  const routesPath = path.resolve(projectPath, "src/routes/user.routes.ts");
   const routesContent = `import { Router } from "express";
 import { getUsers, createUser } from "../controllers/user.controller.js";
 
@@ -54,7 +54,7 @@ export default router;
   fs.outputFileSync(routesPath, routesContent.trim());
 
   // 5. src/controllers/user.controller.ts
-  const controllerPath = path.join(
+  const controllerPath = path.resolve(
     projectPath,
     "src/controllers/user.controller.ts"
   );

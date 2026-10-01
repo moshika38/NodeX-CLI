@@ -107,22 +107,21 @@ app.listen(PORT, () => {
   ];
 
    filesToCreate.forEach(({ filePath, content }) => {
-    const fullPath = path.join(projectPath, filePath);
+    const fullPath = path.resolve(projectPath, filePath);
     const dirName = path.dirname(fullPath);
 
-     fs.ensureDirSync(dirName);
-     fs.writeFileSync(fullPath, content, "utf-8");
+    fs.mkdirSync(dirName, { recursive: true });
+    fs.writeFileSync(fullPath, content, "utf-8");
   });
 }
 
 export function updatePrismaSchema(projectPath) {
-  const prismaDirPath = path.join(projectPath, "prisma");
-  const schemaPath = path.join(prismaDirPath, "schema.prisma");
+  const prismaDirPath = path.resolve(projectPath, "prisma");
+  const schemaPath = path.resolve(prismaDirPath, "schema.prisma");
 
-  fs.ensureDirSync(prismaDirPath);
+  fs.mkdirSync(prismaDirPath, { recursive: true });
 
   const schemaContent = `
-  
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"

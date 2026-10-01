@@ -1,17 +1,18 @@
 import fs from "fs-extra";
 import path from "path";
 import { execSync } from "child_process";
-// import { createProjectFiles } from "./projectConfig.js";
 import { updatePackageJson } from "./src/updatePackageJson.js";
 import { updatePrismaSchema } from "./src/prismaSchema.js";
 import { createProjectFiles } from "./src/createStructure.js";
+import { toValidNpmName } from "../../utils/sanitize.js";
 
-export function setupPostgreSqlProject(projectName, databaseUrl) {
-  const projectPath = path.join(process.cwd(), projectName);
+export function setupPostgreSqlProject(projectName, databaseUrl, packageName) {
+  const projectPath = path.resolve(process.cwd(), projectName);
+  const pkgName = packageName || toValidNpmName(projectName);
 
   try {
     //! 1. Create folder
-    fs.ensureDirSync(projectPath);
+    fs.mkdirSync(projectPath, { recursive: true });
 
     console.log("⚙️ Starting setup process...\n");
 
@@ -43,38 +44,48 @@ export function setupPostgreSqlProject(projectName, databaseUrl) {
     console.log("✅ TypeScript installed successful!");
 
     //! 6. update Package Json
-    updatePackageJson(projectPath);
+    updatePackageJson(projectPath, pkgName);
     console.log("✅ updated Package Json");
 
-    //! 7. init prisma
-    execSync("npx prisma init", { cwd: projectPath, stdio: "ignore" });
-    console.log("✅ npx prisma init successful!");
-
-    //! 8. update database url
+    //! 7. update database url
     if (!databaseUrl || databaseUrl.trim() === "") {
       console.log("⚠️ Warning: Database url not provided!");
     } else {
-      const envPath = path.join(projectPath, ".env");
+      const envPath = path.resolve(projectPath, ".env");
       const envContent = `DATABASE_URL="${databaseUrl}"\n`;
       fs.writeFileSync(envPath, envContent, "utf-8");
       
       console.log("✅ Database url updated Successfully!");
     }
 
-    //! 9. Creating project folders
+    //! 8. Creating project folders
     updatePrismaSchema(projectPath);
     createProjectFiles(projectPath);
     console.log("✅ Update  Structure Successfully!");
 
-    //! 10. generate prisma client
-    execSync("npx prisma generate", { cwd: projectPath, stdio: "ignore" });
+    // Ensure no unsupported prisma.config.* file exists
+    ["prisma.config.ts", "prisma.config.js", "prisma.config.mjs"].forEach((file) => {
+      const filePath = path.resolve(projectPath, file);
+      if (fs.existsSync(filePath)) {
+        fs.removeSync(filePath);
+      }
+    });
+
+    //! 9. generate prisma client
+
+    execSync("npx prisma generate --schema=./prisma/schema.prisma", {
+      cwd: projectPath,
+      stdio: "ignore",
+    });
     if (databaseUrl && databaseUrl.trim() !== "") {
-      execSync("npx prisma db push", { cwd: projectPath, stdio: "ignore" });
-    }else{
+      execSync("npx prisma db push --schema=./prisma/schema.prisma", {
+        cwd: projectPath,
+        stdio: "ignore",
+      });
+    } else {
       console.log("⚠️ Warning: Cannot push database to remote server! Update database url in .env and run `npx prisma db push`");
     }
     console.log("✅ Configured Successfully!");
-
 
 
 
@@ -86,3 +97,4 @@ export function setupPostgreSqlProject(projectName, databaseUrl) {
     console.error("\n❌ An error occurred during setup:", error.message);
   }
 }
+

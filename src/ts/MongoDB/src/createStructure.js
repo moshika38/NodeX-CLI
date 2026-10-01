@@ -94,11 +94,11 @@ app.listen(PORT, () => {
   ];
 
    filesToCreate.forEach(({ filePath, content }) => {
-    const fullPath = path.join(projectPath, filePath);
+    const fullPath = path.resolve(projectPath, filePath);
     const dirName = path.dirname(fullPath);
 
-     fs.ensureDirSync(dirName);
-     fs.writeFileSync(fullPath, content, "utf-8");
+    fs.mkdirSync(dirName, { recursive: true });
+    fs.writeFileSync(fullPath, content, "utf-8");
   });
 
- }
+}

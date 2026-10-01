@@ -7,15 +7,15 @@ import {
   createProjectFiles,
   updatePrismaSchema,
 } from "./src/updateStructure.js";
+import { toValidNpmName } from "../../utils/sanitize.js";
 
-
-
-export function setupSqliteJsProject(projectName) {
-  const projectPath = path.join(process.cwd(), projectName);
+export function setupSqliteJsProject(projectName, packageName) {
+  const projectPath = path.resolve(process.cwd(), projectName);
+  const pkgName = packageName || toValidNpmName(projectName);
 
   try {
     //! 1. Create folder
-    fs.ensureDirSync(projectPath);
+    fs.mkdirSync(projectPath, { recursive: true });
 
     console.log("⚙️ Starting setup process...\n");
 
@@ -32,34 +32,47 @@ export function setupSqliteJsProject(projectName) {
     console.log("✅ packages installed successfully!");
 
     //! 4. update package.json
-    updatePackageJson(projectPath);
+    updatePackageJson(projectPath, pkgName);
     console.log("✅ package.json updated successfully!");
 
-    //! 5. init prisma
-    execSync("npx prisma init", { cwd: projectPath, stdio: "ignore" });
-    console.log("✅ prisma init successful!");
+    //! 5. update database url
 
-    //! 6. update database url
-
-    const envPath = path.join(projectPath, ".env");
+    const envPath = path.resolve(projectPath, ".env");
     const envContent = `DATABASE_URL="file:./dev.db"\n`;
     fs.writeFileSync(envPath, envContent, "utf-8");
 
     console.log("✅ Database url updated Successfully!");
 
-    //! 9. Creating project folders
+    //! 6. Creating project folders
     updatePrismaSchema(projectPath);
     createProjectFiles(projectPath);
     console.log("✅ Update  Structure Successfully!");
 
-    //! 10. generate prisma client
-    execSync("npx prisma generate", { cwd: projectPath, stdio: "ignore" });
-    execSync("npx prisma migrate dev --name init", {
+    // Ensure no unsupported prisma.config.* file exists
+    ["prisma.config.ts", "prisma.config.js", "prisma.config.mjs"].forEach((file) => {
+      const filePath = path.resolve(projectPath, file);
+      if (fs.existsSync(filePath)) {
+        fs.removeSync(filePath);
+      }
+    });
+
+    //! 7. generate prisma client
+
+    execSync("npx prisma generate --schema=./prisma/schema.prisma", {
       cwd: projectPath,
       stdio: "ignore",
     });
-    execSync("npx prisma db push", { cwd: projectPath, stdio: "ignore" });
+    execSync("npx prisma migrate dev --name init --schema=./prisma/schema.prisma", {
+      cwd: projectPath,
+      stdio: "ignore",
+    });
+    execSync("npx prisma db push --schema=./prisma/schema.prisma", {
+      cwd: projectPath,
+      stdio: "ignore",
+    });
     console.log("✅ Configured Successfully!");
+
+
 
     console.log(`\n🎉 Project '${projectName}' setup finished successfully!`);
     console.log(`\nNext steps:`);
@@ -69,3 +82,4 @@ export function setupSqliteJsProject(projectName) {
     console.error("\n❌ An error occurred during setup:", error.message);
   }
 }
+
